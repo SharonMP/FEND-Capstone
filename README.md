@@ -1,17 +1,9 @@
 # Project Details
 
 ## Goal of the project:
+Capstone project that demonstrates a travel app
 
-Gives practice with:
-* Setting up Webpack
-* Sass styles
-* Webpack Loaders and Plugins
-* Creating layouts and page design
-* Service workers
-* Using APIs and creating requests to external urls
-
-## Commands to run
-
+# Commands to run
 * Tests: `npm run test`
 * Dev: `npm run build-dev`
 * Dev with noopen: `npm run build-dev-noopen`
@@ -19,7 +11,12 @@ Gives practice with:
 * Start, reset cache (service worker testing): `npm run start --reset-cache`
 * Prod: `npm run build-prod`
 
-## References
+# Required in .env file:
+* GEONAMES_USER=<>
+* WEATHERBIT_APIKEY=<>
+* PIXABAY_APIKEY=<>
+
+# References
 * Udacity course material and forum posts
 * Various StackOverflow Q&A
 * https://docs.aylien.com/textapi/sdks/#node-js-sdk

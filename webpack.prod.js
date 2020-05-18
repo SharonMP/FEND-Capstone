@@ -2,6 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const HtmlWebPackPlugin = require("html-webpack-plugin")
 const workboxPlugin = require('workbox-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
     entry: './src/client/index.js',
@@ -30,6 +31,14 @@ module.exports = {
                 urlPattern: new RegExp('^https?:\/\/[a-zA-Z0-9-]+.[a-zA-Z0-9-]+.?[a-zA-Z0-9-]*[\/*[a-zA-Z0-9-]*\/*]*$'),
                 handler: 'StaleWhileRevalidate'
             }]
-        })
+        }),
+        new CleanWebpackPlugin({
+            dry: false,
+            // Write Logs to Console
+            verbose: true,
+            // Automatically remove all unused webpack assets on rebuild
+            cleanStaleWebpackAssets: true,
+            protectWebpackAssets: false
+        }),
     ]
 }

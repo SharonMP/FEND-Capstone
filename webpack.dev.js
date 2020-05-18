@@ -23,6 +23,7 @@ module.exports = {
     },
     plugins: [
         new CleanWebpackPlugin({
+            dry: false,
             // Write Logs to Console
             verbose: true,
             // Automatically remove all unused webpack assets on rebuild

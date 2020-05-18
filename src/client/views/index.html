@@ -7,19 +7,12 @@
 
     <body>
 
-        <header>
-            <div class="">
-                Logo
-            </div>
-            <div class="">
-                navigation
-            </div>
-        </header>
-
         <main>
             <section>
                 <form id="form" class="">
-                    <input id="name" type="text" name="input" value="" placeholder="Name">
+                    <input id="destination" type="text" name="input" value="" placeholder="Name of the destination city">
+                    <input id="departure" type="text" name="input" value="" placeholder="Departure date">
+                    <input id="return" type="text" name="input" value="" placeholder="Return date">
                     <input type="submit" name="" value="submit">
                 </form>
             <section>
@@ -29,10 +22,6 @@
                 <div id="results"></div>
             </section>
         </main>
-
-        <footer>
-            <p>This is a footer</p>
-        </footer>
         <script>
           // Check that service workers are supported
           if ('serviceWorker' in navigator) {
