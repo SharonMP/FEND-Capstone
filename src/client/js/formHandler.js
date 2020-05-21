@@ -12,7 +12,7 @@ const getGeonamesDetails = async(localUrl, cityName) => {
   try {
     return await request.json();
 
-  } catch(error) {
+  } catch (error) {
     markUIWithError('There was an unexpected error getting details for the trip');
   }
 }
@@ -24,14 +24,16 @@ function areDatesValid(departureDate, returnDate) {
   return departureDate.getTime() <= returnDate.getTime();
 }
 
-function markUIWithError(message) {
+function displayErrorMessage(message) {
+  document.getElementById('error').innerHTML = message;
+  document.getElementById('error-section').style.display = "block";
+}
+function markUIWithError() {
   const red = 'red';
   const departureElement = document.getElementById('departure');
   departureElement.style.backgroundColor = red;
   const returnElement = document.getElementById('return');
   returnElement.style.backgroundColor = red;
-  document.getElementById('error').innerHTML = message;
-  document.getElementById('error-section').style.display = "block";
 }
 
 async function handleSubmit(event) {
@@ -50,12 +52,31 @@ async function handleSubmit(event) {
   let datesAreValid = areDatesValid(departureDate, returnDate);
 
   if (!datesAreValid) {
-    markUIWithError('Departure date should be earlier than return date');
+    markUIWithError();
+    displayErrorMessage('Departure date should be earlier than return date');
     return;
   }
 
-
   let tripResult = await getGeonamesDetails('http://localhost:8081/getTripDetails', {'city':finalizedDestination});
+
+  console.log('tripResult.error: ' + tripResult.error);
+  if (typeof tripResult.error !== 'undefined') {
+    var errorMessage = '';
+
+    if (tripResult.error === 'geonames') {
+      errorMessage = 'Could not find the destination. Please ensure city is in US.';
+    } else if (tripResult.error === 'weatherbit') {
+      errorMessage = 'There was an issue getting weather information of the destination city. Please try again after some time.';
+    } else if (tripResult.error === 'pixabay') {
+      errorMessage = 'There was an issue getting images of the destination city. Please try again after some time.';
+    } else {
+      errorMessage = 'There was an issue getting details for your trip. Please try again after some time.';
+    }
+    displayErrorMessage(errorMessage);
+    return;
+  }
+
+  console.log('Passed the error handling block');
 
   let resultingMessage =
   'You have an upcoming trip of ' + numberDaysInTrip + ' day(s) to ' + destination + '<br/>'

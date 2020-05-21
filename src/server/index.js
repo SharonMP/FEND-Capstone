@@ -41,39 +41,86 @@ async function getTripDetails(request, response) {
   let city = body.city;
 
   let geonamesUrl = 'http://api.geonames.org/searchJSON?name_equals=' + city + '&country=US&maxRows=1&username=' + process.env.GEONAMES_USER;
-  let geonamesResult = await (await fetch(geonamesUrl)).json();
+  let geonamesResult;
+  let lat;
+  let lng;
+  let geonamesResultRaw = await fetch(geonamesUrl);
 
-  let lat = geonamesResult.geonames[0].lat
-  let lng = geonamesResult.geonames[0].lng;
-  console.log('geoNamesResult: ' + lat + ', ' + lng);
+  try {
+    geonamesResult = await geonamesResultRaw.json();
 
-  projectData['lat'] = lat;
-  projectData['lng'] = lng;
+    console.log('geonamesResult: ' + JSON.stringify(geonamesResult));
+    console.log('geonamesResult.geonames: ' + JSON.stringify(geonamesResult.geonames));
 
+    lat = geonamesResult.geonames[0].lat
+    lng = geonamesResult.geonames[0].lng;
+    console.log('geoNamesResult: ' + lat + ', ' + lng);
+
+    projectData['lat'] = lat;
+    projectData['lng'] = lng;
+
+  } catch (error) {
+    projectData['error'] = 'geonames';
+    response.send(projectData);
+    return;
+  }
+
+  console.log('lat: ' + lat + ', lng: ' + lng);
   let weatherbitUrl = 'https://api.weatherbit.io/v2.0/forecast/daily?lat=' + lat + '&lon=' + lng + '&key=' + process.env.WEATHERBIT_APIKEY + '&units=I';
-  let weatherbitResult = await (await fetch(weatherbitUrl)).json();
+  console.log('weatherbitUrl: ' + weatherbitUrl);
+  let weatherbitResult;
+  let highTemp;
+  let lowTemp;
+  let weather;
+  let weatherbitResultRaw = await fetch(weatherbitUrl);
 
-  let temp = weatherbitResult.data[0].temp;
-  let highTemp = weatherbitResult.data[0].high_temp;
-  let lowTemp = weatherbitResult.data[0].low_temp;
-  let weather = weatherbitResult.data[0].weather;
-  console.log('weatherbitResult: ' + temp);
+  try {
+    weatherbitResult = await weatherbitResultRaw.json();
 
-  projectData['temp'] = temp;
-  projectData['highTemp'] = highTemp;
-  projectData['lowTemp'] = lowTemp;
-  projectData['weatherDescription'] = weather.description;
-  projectData['weatherIcon'] = 'https://www.weatherbit.io/static/img/icons/' + weather.icon + '.png';
+    console.log('weatherbitResult: ' + JSON.stringify(weatherbitResult));
+    console.log('weatherbitResult.data: ' + JSON.stringify(weatherbitResult.data));
+
+    highTemp = weatherbitResult.data[0].high_temp;
+    lowTemp = weatherbitResult.data[0].low_temp;
+    weather = weatherbitResult.data[0].weather;
+
+    projectData['highTemp'] = highTemp;
+    projectData['lowTemp'] = lowTemp;
+    projectData['weatherDescription'] = weather.description;
+    projectData['weatherIcon'] = 'https://www.weatherbit.io/static/img/icons/' + weather.icon + '.png';
+
+    console.log('weatherBit projectData: ' + JSON.stringify(projectData));
+    console.log('At end of weatherbit block');
+  } catch (error) {
+    projectData['error'] = 'weatherbit';
+    response.send(projectData);
+    return;
+  }
 
   let pixabayUrl = 'https://pixabay.com/api/?q=' + city + '&image_type=photo&category=places&safesearch=true&key=' + process.env.PIXABAY_APIKEY;
-  let pixabayResult = await (await fetch(pixabayUrl)).json();
+  let pixabayResult;
+  let imageUrl;
+  let pixabayResultRaw = await fetch(pixabayUrl);
 
-  let imageUrl = pixabayResult.hits[0].largeImageURL;
-  console.log('pixabayResult: ' + imageUrl);
+  try {
+    pixabayResult = await pixabayResultRaw.json();
 
-  projectData['imageUrl'] = imageUrl;
+    console.log('pixabayResult: ' + JSON.stringify(pixabayResult));
+    console.log('pixabayResult.hits: ' + JSON.stringify(pixabayResult.hits));
 
+    imageUrl = pixabayResult.hits[0].largeImageURL;
+
+    projectData['imageUrl'] = imageUrl;
+  } catch (error) {
+    projectData['error'] = 'pixabay';
+    response.send(projectData);
+    return;
+  }
+
+  console.log('It\'s all good!');
+  console.log('projectData: ' + JSON.stringify(projectData));
   response.send(projectData);
+  return;
 }
 
 module.exports = server
