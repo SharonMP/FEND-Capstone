@@ -1,28 +1,37 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-    <head>
-        <meta charset="utf-8">
-        <title>Test</title>
-    </head>
+<html lang="en">
+<head>
+    <title>Udacity FEND Capstone</title>
+</head>
+<body>
+<div class="main">
+    <header>
+        <h1>Travel Planner</h1>
+    </header>
+    <section id="form-section">
+        <form id="form" class="form">
+            <label for="destination">My trip to: </label>
+            <input id="destination" type="text" placeholder="Enter cityname (should be in US)" required/> <br/>
+            <label for="destination">Departure date: </label>
+            <input id="departure" type="date" required/> <br/>
+            <label for="destination">Return date: </label>
+            <input id="return" type="date" required/> <br/>
+            <input type="submit" name="" value="submit">
+        </form>
+    </section>
+    <br/>
 
-    <body>
+    <section id="results-section">
+        <h3>Here are your travel details:</h3>
+        <div id="results" class="results"></div>
+    </section>
 
-        <main>
-            <section>
-                <form id="form" class="">
-                    <input id="destination" type="text" name="input" value="" placeholder="Name of the destination city">
-                    <input id="departure" type="text" name="input" value="" placeholder="Departure date">
-                    <input id="return" type="text" name="input" value="" placeholder="Return date">
-                    <input type="submit" name="" value="submit">
-                </form>
-            <section>
+    <section id="error-section">
+        <br/><br/><br/><br/><br/>
+        <div id="error" class="error"></div>
+    </section>
 
-            <section>
-                <strong>Form Results:</strong>
-                <div id="results"></div>
-            </section>
-        </main>
-        <script>
+    <script>
           // Check that service workers are supported
           if ('serviceWorker' in navigator) {
             console.log('found serviceworker!');
@@ -32,7 +41,6 @@
             });
           }
         </script>
-
-
-    </body>
+</div>
+</body>
 </html>

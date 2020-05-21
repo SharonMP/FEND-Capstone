@@ -50,13 +50,20 @@ async function getTripDetails(request, response) {
   projectData['lat'] = lat;
   projectData['lng'] = lng;
 
-  let weatherbitUrl = 'https://api.weatherbit.io/v2.0/current?lat=' + lat + '&lon=' + lng + '&key=' + process.env.WEATHERBIT_APIKEY;
+  let weatherbitUrl = 'https://api.weatherbit.io/v2.0/forecast/daily?lat=' + lat + '&lon=' + lng + '&key=' + process.env.WEATHERBIT_APIKEY + '&units=I';
   let weatherbitResult = await (await fetch(weatherbitUrl)).json();
 
   let temp = weatherbitResult.data[0].temp;
+  let highTemp = weatherbitResult.data[0].high_temp;
+  let lowTemp = weatherbitResult.data[0].low_temp;
+  let weather = weatherbitResult.data[0].weather;
   console.log('weatherbitResult: ' + temp);
 
   projectData['temp'] = temp;
+  projectData['highTemp'] = highTemp;
+  projectData['lowTemp'] = lowTemp;
+  projectData['weatherDescription'] = weather.description;
+  projectData['weatherIcon'] = 'https://www.weatherbit.io/static/img/icons/' + weather.icon + '.png';
 
   let pixabayUrl = 'https://pixabay.com/api/?q=' + city + '&image_type=photo&category=places&safesearch=true&key=' + process.env.PIXABAY_APIKEY;
   let pixabayResult = await (await fetch(pixabayUrl)).json();

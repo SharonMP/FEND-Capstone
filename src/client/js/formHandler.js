@@ -17,6 +17,24 @@ const getGeonamesDetails = async(localUrl, cityName) => {
   }
 }
 
+function areDatesValid(departureDate, returnDate) {
+  if (departureDate.getTime() <= returnDate.getTime()) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+function markUIWithError(message) {
+  const red = 'red';
+  const departureElement = document.getElementById('departure');
+  departureElement.style.backgroundColor = red;
+  const returnElement = document.getElementById('return');
+  returnElement.style.backgroundColor = red;
+  document.getElementById('error').innerHTML = message;
+  document.getElementById('error-section').style.display = "block";
+}
+
 async function handleSubmit(event) {
   event.preventDefault();
 
@@ -30,18 +48,29 @@ async function handleSubmit(event) {
   let returnDate = new Date(returnDateRaw);
   let numberDaysInTrip = (returnDate - departureDate) / (1000 * 60 * 60 * 24); // convert to days
 
+  let datesAreValid = areDatesValid(departureDate, returnDate);
+
+  if (!datesAreValid) {
+    markUIWithError('Departure date should be earlier than return date');
+    return;
+  }
+
+
   let tripResult = await getGeonamesDetails('http://localhost:8081/getTripDetails', {'city':finalizedDestination});
 
   let resultingMessage = 'You have an upcoming trip of ' + numberDaysInTrip + ' day(s) to ' + destination + '<br/>'
   + 'Departure date is ' + departureDateRaw + '<br/>'
   + 'Return date is ' + returnDateRaw + '<br/>'
-  + 'Trip is in ' + daysTillTrip.toFixed(2) + ' day(s) <br/>'
-  + 'Few details for the trip: <br/>'
-  + 'The current temperature of destination is ' + tripResult.temp + '<br/>'
+  + 'Trip is ' + daysTillTrip.toFixed(2) + ' day(s) away <br/>'
+  + 'The typical weather there is High: ' + tripResult.highTemp + ' &#8457;, Low: ' + tripResult.lowTemp + ' &#8457; <br/>'
+  + 'Mostly <img src="' + tripResult.weatherIcon + '" alt ="' + tripResult.weatherDescription
+  + '" height="25" width="25"> (' + tripResult.weatherDescription.toLower() + ') throughout the day<br/>'
   + 'An image from the destination <br/>'
-  + '<img src=\"' + tripResult.imageUrl + '\" alt="image of ' + destination + '" height="100" width="100"/>';
+  + '<img src="' + tripResult.imageUrl + '" alt="image of ' + destination + '" height="100" width="100"/>';
 
+  document.getElementById('form-section').style.display = "none";
   document.getElementById('results').innerHTML = resultingMessage;
+  document.getElementById('results-section').style.display = "block";
 }
 
 export { handleSubmit }
