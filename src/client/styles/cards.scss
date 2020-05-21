@@ -1,0 +1,35 @@
+.card {
+  padding: 10px 10px 10px 10px;
+  border: 2px solid #ddd;
+  margin: 1%;
+  display: grid;
+  grid-template-areas:
+    "image text";
+}
+
+.r-image {
+  grid-area: "image";
+}
+
+.r-text {
+  grid-area: "text";
+}
+
+@media (min-width: 900px) {
+  .cards {
+    display: flex;
+  }
+
+  .card {
+    flex: 1 0 10%;
+  }
+
+}
+
+@media (max-width: 700px) {
+.card {
+  grid-template-areas:
+    "image"
+    "text";
+}
+}

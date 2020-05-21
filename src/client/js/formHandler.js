@@ -18,11 +18,10 @@ const getGeonamesDetails = async(localUrl, cityName) => {
 }
 
 function areDatesValid(departureDate, returnDate) {
-  if (departureDate.getTime() <= returnDate.getTime()) {
-    return false;
-  } else {
-    return true;
-  }
+  console.log('departureDate: ' + departureDate);
+  console.log('returnDate: ' + returnDate);
+  console.log('departureDate.getTime() <= returnDate.getTime(): ' + (departureDate.getTime() <= returnDate.getTime()));
+  return departureDate.getTime() <= returnDate.getTime();
 }
 
 function markUIWithError(message) {
@@ -58,17 +57,24 @@ async function handleSubmit(event) {
 
   let tripResult = await getGeonamesDetails('http://localhost:8081/getTripDetails', {'city':finalizedDestination});
 
-  let resultingMessage = 'You have an upcoming trip of ' + numberDaysInTrip + ' day(s) to ' + destination + '<br/>'
+  let resultingMessage =
+  'You have an upcoming trip of ' + numberDaysInTrip + ' day(s) to ' + destination + '<br/>'
   + 'Departure date is ' + departureDateRaw + '<br/>'
   + 'Return date is ' + returnDateRaw + '<br/>'
   + 'Trip is ' + daysTillTrip.toFixed(2) + ' day(s) away <br/>'
   + 'The typical weather there is High: ' + tripResult.highTemp + ' &#8457;, Low: ' + tripResult.lowTemp + ' &#8457; <br/>'
   + 'Mostly <img src="' + tripResult.weatherIcon + '" alt ="' + tripResult.weatherDescription
-  + '" height="25" width="25"> (' + tripResult.weatherDescription.toLower() + ') throughout the day<br/>'
-  + 'An image from the destination <br/>'
-  + '<img src="' + tripResult.imageUrl + '" alt="image of ' + destination + '" height="100" width="100"/>';
+  + '" height="25" width="25"> (' + tripResult.weatherDescription.toLowerCase() + ') throughout the day<br/>'
+  ;
 
   document.getElementById('form-section').style.display = "none";
+
+  let imageElement = document.getElementById('results-img');
+  imageElement.src = tripResult.imageUrl;
+  imageElement.height = "250";
+  imageElement.width = "250";
+  imageElement.alt = "image of " + destination;
+
   document.getElementById('results').innerHTML = resultingMessage;
   document.getElementById('results-section').style.display = "block";
 }

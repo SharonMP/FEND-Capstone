@@ -1,10 +1,9 @@
 import { handleSubmit } from './js/formHandler'
 
 import './styles/base.scss'
-import './styles/footer.scss'
+import './styles/cards.scss'
 import './styles/header.scss'
 import './styles/section.scss'
-import './styles/resets.scss'
 
 document.getElementById('results-section').style.display = "none";
 document.getElementById('error-section').style.display = "none";
