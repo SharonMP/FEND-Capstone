@@ -100,4 +100,4 @@ async function handleSubmit(event) {
   document.getElementById('results-section').style.display = "block";
 }
 
-export { handleSubmit }
+export { handleSubmit, areDatesValid }
