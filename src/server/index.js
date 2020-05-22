@@ -49,12 +49,8 @@ async function getTripDetails(request, response) {
   try {
     geonamesResult = await geonamesResultRaw.json();
 
-    console.log('geonamesResult: ' + JSON.stringify(geonamesResult));
-    console.log('geonamesResult.geonames: ' + JSON.stringify(geonamesResult.geonames));
-
     lat = geonamesResult.geonames[0].lat
     lng = geonamesResult.geonames[0].lng;
-    console.log('geoNamesResult: ' + lat + ', ' + lng);
 
     projectData['lat'] = lat;
     projectData['lng'] = lng;
@@ -65,9 +61,7 @@ async function getTripDetails(request, response) {
     return;
   }
 
-  console.log('lat: ' + lat + ', lng: ' + lng);
   let weatherbitUrl = 'https://api.weatherbit.io/v2.0/forecast/daily?lat=' + lat + '&lon=' + lng + '&key=' + process.env.WEATHERBIT_APIKEY + '&units=I';
-  console.log('weatherbitUrl: ' + weatherbitUrl);
   let weatherbitResult;
   let highTemp;
   let lowTemp;
@@ -77,9 +71,6 @@ async function getTripDetails(request, response) {
   try {
     weatherbitResult = await weatherbitResultRaw.json();
 
-    console.log('weatherbitResult: ' + JSON.stringify(weatherbitResult));
-    console.log('weatherbitResult.data: ' + JSON.stringify(weatherbitResult.data));
-
     highTemp = weatherbitResult.data[0].high_temp;
     lowTemp = weatherbitResult.data[0].low_temp;
     weather = weatherbitResult.data[0].weather;
@@ -88,9 +79,6 @@ async function getTripDetails(request, response) {
     projectData['lowTemp'] = lowTemp;
     projectData['weatherDescription'] = weather.description;
     projectData['weatherIcon'] = 'https://www.weatherbit.io/static/img/icons/' + weather.icon + '.png';
-
-    console.log('weatherBit projectData: ' + JSON.stringify(projectData));
-    console.log('At end of weatherbit block');
   } catch (error) {
     projectData['error'] = 'weatherbit';
     response.send(projectData);
@@ -105,9 +93,6 @@ async function getTripDetails(request, response) {
   try {
     pixabayResult = await pixabayResultRaw.json();
 
-    console.log('pixabayResult: ' + JSON.stringify(pixabayResult));
-    console.log('pixabayResult.hits: ' + JSON.stringify(pixabayResult.hits));
-
     imageUrl = pixabayResult.hits[0].largeImageURL;
 
     projectData['imageUrl'] = imageUrl;
@@ -117,8 +102,6 @@ async function getTripDetails(request, response) {
     return;
   }
 
-  console.log('It\'s all good!');
-  console.log('projectData: ' + JSON.stringify(projectData));
   response.send(projectData);
   return;
 }

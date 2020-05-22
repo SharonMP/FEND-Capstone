@@ -18,9 +18,6 @@ const getGeonamesDetails = async(localUrl, cityName) => {
 }
 
 function areDatesValid(departureDate, returnDate) {
-  console.log('departureDate: ' + departureDate);
-  console.log('returnDate: ' + returnDate);
-  console.log('departureDate.getTime() <= returnDate.getTime(): ' + (departureDate.getTime() <= returnDate.getTime()));
   return departureDate.getTime() <= returnDate.getTime();
 }
 
@@ -59,7 +56,6 @@ async function handleSubmit(event) {
 
   let tripResult = await getGeonamesDetails('http://localhost:8081/getTripDetails', {'city':finalizedDestination});
 
-  console.log('tripResult.error: ' + tripResult.error);
   if (typeof tripResult.error !== 'undefined') {
     var errorMessage = '';
 
@@ -75,8 +71,6 @@ async function handleSubmit(event) {
     displayErrorMessage(errorMessage);
     return;
   }
-
-  console.log('Passed the error handling block');
 
   let resultingMessage =
   'You have an upcoming trip of ' + numberDaysInTrip + ' day(s) to ' + destination + '<br/>'

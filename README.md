@@ -1,7 +1,11 @@
 # Project Details
 
-## Goal of the project:
+## Goal of the project
 Capstone project that demonstrates a travel app
+
+## Additional features implemented
+* Add end date and display length of trip
+* Incorporate icons into forecast.
 
 # Commands to run
 * Tests: `npm run test`
